@@ -18,10 +18,4 @@
         android:id="@+id/searchView"
         android:layout_gravity="right|top" />
 
-    <EditText
-        android:layout_width="143dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_gravity="center" />
-
 </FrameLayout>

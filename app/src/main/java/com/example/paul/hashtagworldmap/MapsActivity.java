@@ -1,12 +1,9 @@
 package com.example.paul.hashtagworldmap;
 
-import android.app.SearchManager;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toolbar;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,10 +13,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private android.widget.SearchView search;
+    private String contentJSON;
+    private ArrayList<String> contentJSONArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +58,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     return false;
                 }
             });
-        }catch(NullPointerException e){
-            System.out.println(e);
+        } catch (NullPointerException e) {
+
         }
-        /*
-         ---> Suchanfrage
-        * search = (android.widget.SearchView) findViewById(R.id.searchView);
-        * String query = search.getQuery().toString();
-        * System.out.print("Anfrage: ");
-        * System.out.println(query);
-        */
+        for (int i = 0; i<20; i++) {
+            new JSONFromURL().execute("https://api.instagram.com/v1/locations/" + i + "?access_token=2016498856.08ab859.910c92509e904a4cb1a02dfc71d54015");
+        }
+        JSONArray jsonFile = new JSONArray(contentJSONArray);
     }
 
-    private void doMySearch(String query) {
+public class JSONFromURL extends AsyncTask<String, String, String>{
 
-        System.out.println(query);
+
+    @Override
+    protected String doInBackground(String... params) {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+
+        try {
+            URL url = new URL(params[0]);
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+
+                contentJSONArray.add(buffer.toString());
+                System.out.println(contentJSONArray);
+
+            }catch(FileNotFoundException e){
+
+            }
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if (connection != null){
+                connection.disconnect();
+            }
+            if(reader != null) {
+                connection.disconnect();
+            }
+
+        }
+
+        return null;
     }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+    }
+}
 
 
     /**
