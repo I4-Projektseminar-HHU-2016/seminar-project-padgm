@@ -18,4 +18,39 @@
         android:id="@+id/searchView"
         android:layout_gravity="right|top" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|left|bottom|center_horizontal|right"
+        android:background="#FFFFFF">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/imageButton"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="#d34f4f"
+            android:backgroundTint="#c76868"
+            android:foreground="@drawable/mr_ic_play_light"
+            android:clickable="true"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false" />
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:id="@+id/progressBar"
+            android:layout_gravity="center_horizontal|bottom"
+            android:backgroundTint="#7af480"
+            android:background="#7af480"
+            android:clickable="true"
+            android:layout_marginBottom="100dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal|top" />
+    </FrameLayout>
+
 </FrameLayout>
