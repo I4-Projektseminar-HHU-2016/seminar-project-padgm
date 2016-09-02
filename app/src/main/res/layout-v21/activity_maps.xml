@@ -7,7 +7,7 @@
 
     <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         class="com.google.android.gms.maps.SupportMapFragment"/>
@@ -16,15 +16,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searchView"
-        android:layout_gravity="right|top" />
+        android:layout_gravity="right|top"
+        android:backgroundTint="#c38f8f8f" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frameLayout2"
         android:layout_gravity="top|left|bottom|center_horizontal|right"
-        android:background="#FFFFFF"
-        style="@style/AppTheme">
+        android:background="#a2000000"
+        style="@style/AppTheme"
+        android:visibility="visible"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
         <ProgressBar
             android:layout_width="36dp"
@@ -37,39 +39,10 @@
             android:layout_marginBottom="120dp"
             android:focusableInTouchMode="false"/>
 
-        <EditText
-            android:layout_width="250dp"
-            android:layout_height="64dp"
-            android:id="@+id/editText"
-            android:layout_gravity="top|bottom|center_horizontal"
-            android:layout_marginTop="100dp"
-            android:autoText="false"
-            android:inputType="text"
-            android:text="Username"
-            android:textAlignment="textStart"
-            android:textColor="#8c00d47c"
-            android:textColorHighlight="#00000000"
-            android:textColorLink="#ffffff"
-            android:textSize="20dp" />
-
-        <EditText
-            android:layout_width="250dp"
-            android:layout_height="64dp"
-            android:id="@+id/editText2"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="200dp"
-            android:autoText="false"
-            android:inputType="textPassword|text"
-            android:text="Passwort"
-            android:textAlignment="textStart"
-            android:textColor="#8C00D47C"
-            android:textColorHighlight="#00000000"
-            android:textSize="20dp" />
-
         <Button
             android:layout_width="158dp"
             android:layout_height="58dp"
-            android:text="Anmelden"
+            android:text="Öffnen"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="30dp"
@@ -79,15 +52,52 @@
             android:contextClickable="false"
             android:clickable="true" />
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/imageView2"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="35dp"
-            android:background="@drawable/icon"/>
+        <ImageButton
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:id="@+id/exit"
+            android:layout_gravity="left|top"
+            android:background="@drawable/places_ic_clear"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp" />
+
+        <SeekBar
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/textView"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="50dp"
+            android:textColor="#a4ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Radius"
+            android:id="@+id/textView2"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="50dp"
+            android:textColor="#a4ffffff" />
 
     </FrameLayout>
+
+    <ImageButton
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:id="@+id/imageButton2"
+        android:layout_gravity="left|top"
+        android:background="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:backgroundTint="#c38f8f8f"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="7dp" />
 
 </FrameLayout>
