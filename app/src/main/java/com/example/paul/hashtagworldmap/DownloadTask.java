@@ -81,7 +81,7 @@ public class DownloadTask{
 
             }
 
-        System.out.println("INFOLIST1: " + infoList1);
+        System.out.println("INFOLIST1: " + String.valueOf(infoList1));
         this.infoList = infoList1;
     }
 }

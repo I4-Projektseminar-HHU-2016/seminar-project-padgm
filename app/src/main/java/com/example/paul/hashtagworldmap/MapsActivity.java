@@ -1,24 +1,28 @@
 package com.example.paul.hashtagworldmap;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,8 +37,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private android.widget.SearchView search;
-    private android.widget.TextView username;
-    private android.widget.TextView passwort;
     private android.widget.ProgressBar progressBar;
     private android.widget.Button signInButton;
     private android.widget.FrameLayout frameLayout;
@@ -42,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private android.widget.ImageButton exit;
     private android.widget.SeekBar seekBar;
     private android.widget.TextView textView;
-    private android.widget.ImageButton imageButton2;
+    private android.widget.ImageButton menu;
 
 
     private InstagramSession mInstagramSession;
@@ -56,8 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String CLIENT_SECRET = "94b68417b375459d97bdd5f5479449ed";
     private static final String REDIRECT_URI = "http://localhost";
 
+    private double latitude;
+    private double longitude;
+    private DownloadTask data1;
 
-    LocationTracker locTracker;
+    private LocationManager locationManager;
+    private LocationListener listener;
 
     public int distance;
     private GoogleApiClient mGoogleApiClient;
@@ -65,16 +71,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
-        final DownloadTask data1 = new DownloadTask();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
-
-        imageButton2 = (android.widget.ImageButton) findViewById(R.id.imageButton2);
+        //lookUpForLoc();
+        menu = (android.widget.ImageButton) findViewById(R.id.menu);
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         signInButton = (android.widget.Button) findViewById(R.id.button);
@@ -85,14 +89,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         exit = (android.widget.ImageButton) findViewById(R.id.exit);
         seekBar = (android.widget.SeekBar) findViewById(R.id.seekBar);
         search.setVisibility(View.INVISIBLE);
-        imageButton2.setVisibility(View.INVISIBLE);
-
+        menu.setVisibility(View.INVISIBLE);
 
 
         try {
             search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
+                    menu.setVisibility(View.VISIBLE);
                     System.out.println(query);      //not necessary
                     return true;
                 }
@@ -107,6 +111,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
+        search.setOnClickListener(new SearchView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu.setVisibility(View.INVISIBLE);
+            }
+        });
+        search.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                menu.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int change = 0;
@@ -134,55 +151,103 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         });
 
-        signInButton.setOnClickListener(new Button.OnClickListener(){
+        signInButton.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
 
-                locTracker = new LocationTracker(MapsActivity.this, mMap);
-
-                if(locTracker.isCanGetLocation()) {
-                    double latitude = locTracker.getLatitude();
-                    double longitude = locTracker.getLongitude();
-
-                    Toast.makeText(getApplicationContext(), "Your Location is -\nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                    data1.setLoc(51.23442, 6.778618, distance);
-
-                }
-                else {
-                    locTracker.showSettingsAlert();
-                }
+                data1 = new DownloadTask();
+                data1.setLoc(latitude, longitude, distance);
 
                 frameLayout.setVisibility(View.INVISIBLE);
                 search.setVisibility(View.VISIBLE);
-                imageButton2.setVisibility(View.VISIBLE);
+                menu.setVisibility(View.VISIBLE);
+                infoList = data1.getData();
             }
         });
 
-        exit.setOnClickListener(new Button.OnClickListener(){
+        exit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 frameLayout.setVisibility(View.INVISIBLE);
                 search.setVisibility(View.VISIBLE);
-                imageButton2.setVisibility(View.VISIBLE);
+                menu.setVisibility(View.VISIBLE);
             }
         });
 
 
-        imageButton2.setOnClickListener(new Button.OnClickListener() {
+        menu.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMenu();
             }
         });
 
-        this.infoList = data1.getData();
+
     }
 
     private void openMenu() {
 
     }
+
+/*
+    public void lookUpForLoc() {
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
+
+        configure_button();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 10:
+                configure_button();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void configure_button() {
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        , 10);
+            }
+            return;
+        }
+        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
+
+        locationManager.requestLocationUpdates("gps", 5000, 0, listener);
+    } */
 
     /**
      * Manipulates the map once available.
@@ -196,16 +261,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // Add a marker in Duesseldorf and move the camera
-        LatLng duesseldorf = new LatLng(51.371556, 6.513465);
-        mMap.addMarker(new MarkerOptions().position(duesseldorf).title("Düsseldorf"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(duesseldorf));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        // Add a marker on current location and move the camera
+        LatLng standort = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(standort).title("Standort"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
+        //mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
-        for (Data info : this.infoList) {
-            LatLng neu = new LatLng(info.getLatitude(),info.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()));
-        }
+        SetMarker locationsAround = new SetMarker();
+        locationsAround.setMarker(mMap, infoList);
     }
 
 }
