@@ -12,17 +12,21 @@ import java.util.ArrayList;
 
 
 public class SetMarker {
+
     private GoogleMap googleMap;
     private ArrayList<Data> infoList;
 
     public void setMarker(GoogleMap googleMap, ArrayList<Data> infoList){
+
         this.googleMap = googleMap;
         this.infoList = infoList;
+
         System.out.println("angekommen");
 
         for (Data info : this.infoList) {
             LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()));
         }
+
     }
 }

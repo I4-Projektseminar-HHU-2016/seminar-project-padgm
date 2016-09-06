@@ -40,11 +40,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private android.widget.ProgressBar progressBar;
     private android.widget.Button signInButton;
     private android.widget.FrameLayout frameLayout;
+    private android.widget.FrameLayout menuOpen;
     private android.widget.ImageView mImageView;
     private android.widget.ImageButton exit;
     private android.widget.SeekBar seekBar;
     private android.widget.TextView textView;
     private android.widget.ImageButton menu;
+    private android.widget.Button menuPoint1;
+
 
 
     private InstagramSession mInstagramSession;
@@ -79,10 +82,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //lookUpForLoc();
         menu = (android.widget.ImageButton) findViewById(R.id.menu);
+        menuPoint1 = (android.widget.Button)findViewById(R.id.menuPoint1);
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         signInButton = (android.widget.Button) findViewById(R.id.button);
         frameLayout = (android.widget.FrameLayout) findViewById(R.id.frameLayout2);
+        menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
         textView = (android.widget.TextView) findViewById(R.id.textView);
         progressBar.setVisibility(View.INVISIBLE);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -188,7 +193,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void openMenu() {
+        menuOpen.setVisibility(View.VISIBLE);
+        menuPoint1.setVisibility(View.VISIBLE);
+        menuPoint1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restart();
+                menuOpen.setVisibility(View.INVISIBLE);
+                menu.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 
+    public void restart(){
+        frameLayout.setVisibility(View.VISIBLE);
+        infoList = null;
     }
 
 /*
@@ -265,7 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng standort = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(standort).title("Standort"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
-        //mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
         SetMarker locationsAround = new SetMarker();
         locationsAround.setMarker(mMap, infoList);
