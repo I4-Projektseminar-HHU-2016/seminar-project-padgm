@@ -237,7 +237,6 @@ public class MapsActivity extends FragmentActivity implements
             LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()));
         }
-
     }
 
     private void openMenu() {
@@ -258,8 +257,6 @@ public class MapsActivity extends FragmentActivity implements
         frameLayout.setVisibility(View.VISIBLE);
         infoList = null;
     }
-
-
 
     @Override
     protected void onResume() {
@@ -293,7 +290,9 @@ public class MapsActivity extends FragmentActivity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
         }
