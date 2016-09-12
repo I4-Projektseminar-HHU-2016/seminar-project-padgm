@@ -29,14 +29,26 @@
             android:value="AIzaSyClyYiUxXd_nGlJsdH86EHK3iiEuhKENCQ" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".StartActivity"
             android:label="@string/title_activity_maps">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".LocationActivity">
+        </activity>
+
+        <activity
+            android:name=".MapsActivity">
+        </activity>
+
+
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
