@@ -1,2 +1,2 @@
-#Instagram Hashtag-Weltkarte
+#Instagram Hashtag-Weltkarte (Android App)
 
