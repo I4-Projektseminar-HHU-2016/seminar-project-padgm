@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "470997264869",
+    "project_id": "sacred-cirrus-142510"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470997264869:android:be140f6b036ff504",
+        "android_client_info": {
+          "package_name": "com.example.paul.hashtagworldmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470997264869-9mv1524sk9j8mm9q59u4mnp36qmtl8tv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paul.hashtagworldmap",
+            "certificate_hash": "A57E3677C35C9CB154D245EE07F258A1F47BD1A4"
+          }
+        },
+        {
+          "client_id": "470997264869-0ip6bmcum1d5in7cvp9i5rcdrfk8cbnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL3qiEOG3pfyuorOTeuIJriPni_KU3NP4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

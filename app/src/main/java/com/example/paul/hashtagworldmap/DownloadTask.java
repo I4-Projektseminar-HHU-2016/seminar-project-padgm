@@ -59,7 +59,6 @@ public class DownloadTask{
                 int code = meta.getInt("code");
 
 
-
                 for(int i = 0; i<jsonData.length(); i++) {
 
                     Data info = new Data();
@@ -71,6 +70,9 @@ public class DownloadTask{
 
                     if (code == 200) {
                         infoList1.add(info);
+
+
+
                     } else {
                         System.out.println("Fehler: " + code);
                     }
@@ -84,5 +86,7 @@ public class DownloadTask{
 
         System.out.println("INFOLIST1: " + String.valueOf(infoList1));
         this.infoList = infoList1;
+        SavedLocations newLoc = new SavedLocations();
+        newLoc.setNewLocations(infoList1);
     }
 }

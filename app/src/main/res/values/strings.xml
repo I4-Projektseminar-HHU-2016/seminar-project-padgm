@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">HashtagWorldmap</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">Location Around You</string>
+    <string name="title_activity_maps">Location Around You</string>
     <string name="google_maps_key">AIzaSyClyYiUxXd_nGlJsdH86EHK3iiEuhKENCQ</string>
     <string name="passwort">Passport</string>
 </resources>
