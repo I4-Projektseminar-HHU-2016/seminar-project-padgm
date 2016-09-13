@@ -187,6 +187,5 @@ public class LocationActivity extends AppCompatActivity implements
         startActivity(mapsActivity);
 
     }
-
 }
 

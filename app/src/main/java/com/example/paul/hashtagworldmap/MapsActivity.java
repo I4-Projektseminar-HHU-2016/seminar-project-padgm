@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -120,7 +118,7 @@ public class MapsActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap googleMap) {
         LatLng standort = new LatLng(this.latitude, this.longitude);
 
-        googleMap.addMarker(new MarkerOptions().position(standort).title("Standort").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        googleMap.addMarker(new MarkerOptions().position(standort).title("Standort").icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
