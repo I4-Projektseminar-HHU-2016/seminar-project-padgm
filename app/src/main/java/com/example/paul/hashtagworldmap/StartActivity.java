@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -15,7 +18,6 @@ import java.util.ArrayList;
 public class StartActivity extends Activity {
 
 
-    private android.widget.ProgressBar progressBar;
     private android.widget.Button signInButton;
     private android.widget.SeekBar seekBar;
     private android.widget.TextView textView;
@@ -23,7 +25,7 @@ public class StartActivity extends Activity {
 
     private double latitude;
     private double longitude;
-    private int distance;
+    private static int distance;
     private DownloadTask data1;
     private ArrayList<Data> infoList = new ArrayList<>();
 
@@ -34,12 +36,13 @@ public class StartActivity extends Activity {
         setContentView(R.layout.start_activity);
 
 
-        progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+
         signInButton = (android.widget.Button) findViewById(R.id.button);
         textView = (android.widget.TextView) findViewById(R.id.textView);
         seekBar = (android.widget.SeekBar) findViewById(R.id.seekBar);
+        seekBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
         exit = (android.widget.ImageButton) findViewById(R.id.exit);
+
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int change = 0;
@@ -65,6 +68,8 @@ public class StartActivity extends Activity {
             }
         });
 
+
+
         signInButton.setOnClickListener(new Button.OnClickListener() {
 
             @Override
@@ -77,7 +82,7 @@ public class StartActivity extends Activity {
         exit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startMap();
             }
         });
     }
@@ -88,4 +93,16 @@ public class StartActivity extends Activity {
         startActivity(locActivity);
 
     }
+
+    public void startMap(){
+
+        Intent mapsActivity = new Intent(this, MapsActivity.class);
+        startActivity(mapsActivity);
+
+    }
+
+    public static int getDistance(){
+        return distance;
+    }
+
 }

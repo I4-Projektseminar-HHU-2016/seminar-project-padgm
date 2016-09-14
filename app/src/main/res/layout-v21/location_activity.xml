@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#a524af61"
+    style="@style/AppTheme"
+    tools:context="com.example.paul.hashtagworldmap.LocationActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="DEINE KOORDINATEN:"
+        android:id="@+id/geoText"
+        android:layout_gravity="center_horizontal"
+        android:allowUndo="true"
+        android:textColor="#ffffff"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="LÄNGENGRAD:"
+        android:id="@+id/lonText"
+        android:allowUndo="true"
+        android:textColor="#ffffff"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_gravity="left|center_vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="BREITENGRAD:"
+        android:id="@+id/latText"
+        android:allowUndo="true"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="50dp"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginBottom="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/latInfo"
+        android:allowUndo="true"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="50dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/lonInfo"
+        android:allowUndo="true"
+        android:textColor="#ffffff"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="50dp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center_horizontal|bottom"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressTint="#ffffff" />
+
+</FrameLayout>

@@ -1,6 +1,7 @@
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -22,12 +23,10 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by paul on 12.09.16.
  */
-public class LocationActivity extends AppCompatActivity implements
+public class LocationActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
-
-    private boolean startedMap = false;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -36,12 +35,27 @@ public class LocationActivity extends AppCompatActivity implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private double latitude;
     private double longitude;
+    private boolean startedMap = false;
+
+
+    private android.widget.TextView latInfo;
+    private android.widget.TextView lonInfo;
+    private android.widget.ProgressBar progressBar;
 
     //------------ LocationActivity ----------------
 
     @Override
     protected void onCreate(final Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.location_activity);
+
+
+        progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
+        latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
+        lonInfo = (android.widget.TextView) findViewById(R.id.lonInfo);
+
+
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -54,6 +68,10 @@ public class LocationActivity extends AppCompatActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
+
+        progressBar.setProgress(20);
+        progressBar.setProgress(30);
+        progressBar.setProgress(35);
 
 
     }
@@ -75,9 +93,9 @@ public class LocationActivity extends AppCompatActivity implements
 
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
+
                 }
             });
-
             mGoogleApiClient.disconnect();
         }
     }
@@ -112,13 +130,22 @@ public class LocationActivity extends AppCompatActivity implements
                             longitude = location.getLongitude();
                         }
                     });
+            setCurrentLocation();
         }
         else {
+            progressBar.setProgress(40);
+            progressBar.setProgress(50);
+            progressBar.setProgress(60);
             handleNewLocation(location);
         }
+        progressBar.setProgress(40);
+        progressBar.setProgress(50);
+        progressBar.setProgress(60);
+
     }
 
     public void handleNewLocation(Location location) {
+
         try {
             Log.d(TAG, location.toString());
 
@@ -128,7 +155,9 @@ public class LocationActivity extends AppCompatActivity implements
         }catch(NullPointerException e){
             e.printStackTrace();
         }
+
         setCurrentLocation();
+
     }
 
     @Override
@@ -175,11 +204,41 @@ public class LocationActivity extends AppCompatActivity implements
         System.out.println("LOCATIONACTIVITY SET CURRENT LOCATION: LAT = " + this.latitude + " LNG = " + this.longitude);
         LatLng curLoc = new LatLng(this.latitude, this.longitude);
         CurrentLocation.setCurLoc(curLoc);
-        if(!startedMap) {
-                startedMap = true;
-                startMap();
-        }
+
+        latInfo.setText(String.valueOf(latitude));
+        lonInfo.setText(String.valueOf(longitude));
+
+
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setProgress(80);
+                        progressBar.setProgress(90);
+                        progressBar.setProgress(100);
+
+
+                        if(!startedMap && progressBar.getProgress() == 100) {
+                            startedMap = true;
+                            startMap();
+                        }
+                    }
+                });
+            }
+        };
+        thread.start();
+
+
     }
+
 
     public void startMap(){
 

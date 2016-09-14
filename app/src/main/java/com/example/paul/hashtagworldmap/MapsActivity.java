@@ -1,13 +1,17 @@
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,7 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class MapsActivity extends AppCompatActivity implements
+public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback{
 
 
@@ -30,6 +34,7 @@ public class MapsActivity extends AppCompatActivity implements
     private android.widget.SearchView search;
     private android.widget.FrameLayout menuOpen;
     private android.widget.ImageButton menu;
+    private android.widget.ImageButton menuExit;
     private android.widget.Button menuPoint1;
 
     public ArrayList<Data> infoList = new ArrayList<>();
@@ -57,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements
         mapFragment.getMapAsync(MapsActivity.this);
 
         menu = (android.widget.ImageButton) findViewById(R.id.menu);
+        menuExit = (android.widget.ImageButton) findViewById(R.id.menuExit);
         menuPoint1 = (android.widget.Button) findViewById(R.id.menuPoint1);
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
@@ -75,6 +81,7 @@ public class MapsActivity extends AppCompatActivity implements
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    menu.setVisibility(View.INVISIBLE);
                     System.out.println(newText);    //not necessary
                     return false;
                 }
@@ -157,12 +164,6 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
 
-    public void startLocActivity() {
-
-        Intent location = new Intent(this, LocationActivity.class);
-        startActivity(location);
-
-    }
 
     public void startStartActivity(){
 
@@ -186,14 +187,26 @@ public class MapsActivity extends AppCompatActivity implements
     public void downloadData(){
 
         data1 = new DownloadTask();
-        data1.setLoc(latitude, longitude, distance);
+        data1.setLoc(latitude, longitude, StartActivity.getDistance());
         infoList = data1.getData();
 
     }
 
     private void openMenu() {
+        menu.setVisibility(View.INVISIBLE);
+        menuExit.setVisibility(View.VISIBLE);
         menuOpen.setVisibility(View.VISIBLE);
         menuPoint1.setVisibility(View.VISIBLE);
+
+
+        menuExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuOpen.setVisibility(View.INVISIBLE);
+                menu.setVisibility(View.VISIBLE);
+            }
+        });
+
         menuPoint1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
