@@ -72,6 +72,8 @@ public class MapsActivity extends FragmentActivity implements
 
         try {
             search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     menu.setVisibility(View.VISIBLE);
@@ -85,6 +87,7 @@ public class MapsActivity extends FragmentActivity implements
                     System.out.println(newText);    //not necessary
                     return false;
                 }
+
             });
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -139,13 +142,10 @@ public class MapsActivity extends FragmentActivity implements
         ArrayList<ArrayList<Data>> list = new ArrayList<>();
         ArrayList<Data> infoList1 = new ArrayList<>();
 
+
         try {
             list = getLoc.getSavedLocations();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try{
             for(int i = 1; i<list.size(); i++) {
                System.out.println("TEST!!! " + list.get(i));
                 infoList1 = list.get(i);
@@ -157,6 +157,8 @@ public class MapsActivity extends FragmentActivity implements
 
             }
         }catch(NullPointerException e){
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
