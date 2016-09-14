@@ -181,9 +181,9 @@ public class MapsActivity extends FragmentActivity implements
             this.latitude = currentLocation.latitude;
             this.longitude = currentLocation.longitude;
         }catch(NullPointerException e){
-            e.printStackTrace();
+            this.latitude = 51.2166667;
+            this.longitude = 6.7666667;
         }
-
     }
 
     public void downloadData(){
@@ -231,9 +231,9 @@ public class MapsActivity extends FragmentActivity implements
             return;
         }
 
-        startStartActivity();
-
         infoList = null;
         mMap.clear();
+
+        startStartActivity();
     }
 }
