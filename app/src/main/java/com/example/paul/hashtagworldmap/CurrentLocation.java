@@ -7,14 +7,17 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class CurrentLocation {
 
-    public static LatLng loc;
+    public static LatLng loc = new LatLng(0, 0);
 
     public static void setCurLoc(LatLng loc1){
+
         loc = loc1;
+
     }
 
 
     public static LatLng getCurLoc(){
+
         return loc;
     }
 }

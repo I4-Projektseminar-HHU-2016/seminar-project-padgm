@@ -1,18 +1,16 @@
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,39 +21,36 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by paul on 12.09.16.
  */
-public class LocationActivity extends Activity implements
+public class LocationActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
+    public static final String TAG = MapsActivity.class.getSimpleName();
+
+    /*
+     * Define a request code to send to Google Play services
+     * This code is returned in Activity.onActivityResult
+     */
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+
+
+
+    private TextView latInfo;
+    private TextView lonInfo;
+    private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    public static final String TAG = LocationActivity.class.getSimpleName();
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private double latitude;
-    private double longitude;
-    private boolean startedMap = false;
-
-
-    private android.widget.TextView latInfo;
-    private android.widget.TextView lonInfo;
-    private android.widget.ProgressBar progressBar;
-
-    //------------ LocationActivity ----------------
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_activity);
-
 
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
         latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
         lonInfo = (android.widget.TextView) findViewById(R.id.lonInfo);
-
-
-
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -67,13 +62,7 @@ public class LocationActivity extends Activity implements
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1000); // 1 second, in milliseconds
-
-        progressBar.setProgress(20);
-        progressBar.setProgress(30);
-        progressBar.setProgress(35);
-
-
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
     @Override
@@ -85,26 +74,31 @@ public class LocationActivity extends Activity implements
     @Override
     protected void onPause() {
         super.onPause();
+
         if (mGoogleApiClient.isConnected()) {
-
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, new com.google.android.gms.location.LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                }
-            });
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
     }
 
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+        latInfo.setText(String.valueOf(currentLatitude));
+        lonInfo.setText(String.valueOf(currentLongitude));
+
+        setCurLoc(latLng);
+
+    }
+
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-
-        Log.i(TAG, "Location services connected");
+    public void onConnected(Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -115,66 +109,45 @@ public class LocationActivity extends Activity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
         if (location == null) {
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest,
-                    new com.google.android.gms.location.LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
-
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    });
-            setCurrentLocation();
-        }
-        else {
-            progressBar.setProgress(40);
-            progressBar.setProgress(50);
-            progressBar.setProgress(60);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
             handleNewLocation(location);
         }
-        progressBar.setProgress(40);
-        progressBar.setProgress(50);
-        progressBar.setProgress(60);
-
-    }
-
-    public void handleNewLocation(Location location) {
-
-        try {
-            Log.d(TAG, location.toString());
-
-            this.latitude = location.getLatitude();
-            this.longitude = location.getLongitude();
-
-        }catch(NullPointerException e){
-            e.printStackTrace();
-        }
-
-        setCurrentLocation();
-
+        handleNewLocation(location);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Location services suspended. Please reconnect.");
+
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        /*
+         * Google Play services can resolve some errors it detects.
+         * If the error has a resolution, try sending an Intent to
+         * start a Google Play services activity that can resolve
+         * error.
+         */
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
                 connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                /*
+                 * Thrown if Google Play services canceled the original
+                 * PendingIntent
+                 */
             } catch (IntentSender.SendIntentException e) {
+                // Log the error
                 e.printStackTrace();
             }
         } else {
+            /*
+             * If no resolution is available, display a dialog to the
+             * user with the error.
+             */
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
@@ -184,31 +157,7 @@ public class LocationActivity extends Activity implements
         handleNewLocation(location);
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    public void setCurrentLocation(){
-
-        System.out.println("LOCATIONACTIVITY SET CURRENT LOCATION: LAT = " + this.latitude + " LNG = " + this.longitude);
-        LatLng curLoc = new LatLng(this.latitude, this.longitude);
-        CurrentLocation.setCurLoc(curLoc);
-
-        latInfo.setText(String.valueOf(latitude));
-        lonInfo.setText(String.valueOf(longitude));
-
-
+    public void startMap(){
 
         Thread thread = new Thread() {
             @Override
@@ -221,15 +170,8 @@ public class LocationActivity extends Activity implements
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setProgress(80);
                         progressBar.setProgress(90);
                         progressBar.setProgress(100);
-
-
-                        if(!startedMap && progressBar.getProgress() == 100) {
-                            startedMap = true;
-                            startMap();
-                        }
                     }
                 });
             }
@@ -237,14 +179,14 @@ public class LocationActivity extends Activity implements
         thread.start();
 
 
+        Intent startMap = new Intent(this, MapsActivity.class);
+        startActivity(startMap);
     }
 
+    public void setCurLoc(LatLng curLocLatLng){
 
-    public void startMap(){
-
-        Intent mapsActivity = new Intent(this, MapsActivity.class);
-        startActivity(mapsActivity);
+        CurrentLocation.setCurLoc(curLocLatLng);
+        startMap();
 
     }
 }
-

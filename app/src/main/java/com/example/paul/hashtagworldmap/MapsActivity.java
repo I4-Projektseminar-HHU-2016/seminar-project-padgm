@@ -135,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements
         System.out.println("ORT: " + latitude + " / //// / " + longitude);
         for (Data info : this.infoList) {
             LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-            googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()));
+            googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
         }
 
         SavedLocations getLoc = new SavedLocations();
@@ -152,7 +152,7 @@ public class MapsActivity extends FragmentActivity implements
 
                 for (Data info : infoList1) {
                     LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
                 }
 
             }
@@ -175,21 +175,21 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     public void getCurrentLocation(){
-
-        LatLng currentLocation = CurrentLocation.getCurLoc();
         try {
+        LatLng currentLocation = CurrentLocation.getCurLoc();
+
             this.latitude = currentLocation.latitude;
             this.longitude = currentLocation.longitude;
         }catch(NullPointerException e){
-            this.latitude = 51.2166667;
-            this.longitude = 6.7666667;
+            e.printStackTrace();
         }
+
     }
 
     public void downloadData(){
 
         data1 = new DownloadTask();
-        data1.setLoc(latitude, longitude, StartActivity.getDistance());
+        data1.setLoc(this.latitude, this.longitude, StartActivity.getDistance());
         infoList = data1.getData();
 
     }
