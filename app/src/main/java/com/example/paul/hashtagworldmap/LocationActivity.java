@@ -51,6 +51,8 @@ public class LocationActivity extends FragmentActivity implements
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
         latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
         lonInfo = (android.widget.TextView) findViewById(R.id.lonInfo);
+        progressBar.setProgress(20);
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -85,13 +87,14 @@ public class LocationActivity extends FragmentActivity implements
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
 
+        progressBar.setProgress(55);
+
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
-        latInfo.setText(String.valueOf(currentLatitude));
-        lonInfo.setText(String.valueOf(currentLongitude));
+
 
         setCurLoc(latLng);
 
@@ -109,13 +112,16 @@ public class LocationActivity extends FragmentActivity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        progressBar.setProgress(40);
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
+
+            latInfo.setText(String.valueOf(location.getLatitude()));
+            lonInfo.setText(String.valueOf(location.getLongitude()));
             handleNewLocation(location);
         }
-        handleNewLocation(location);
     }
 
     @Override
@@ -159,31 +165,16 @@ public class LocationActivity extends FragmentActivity implements
 
     public void startMap(){
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setProgress(90);
-                        progressBar.setProgress(100);
-                    }
-                });
-            }
-        };
-        thread.start();
-
+        progressBar.setProgress(90);
+        progressBar.setProgress(100);
 
         Intent startMap = new Intent(this, MapsActivity.class);
         startActivity(startMap);
     }
 
     public void setCurLoc(LatLng curLocLatLng){
+
+        progressBar.setProgress(80);
 
         CurrentLocation.setCurLoc(curLocLatLng);
         startMap();

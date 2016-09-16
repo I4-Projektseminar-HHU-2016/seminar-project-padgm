@@ -1,17 +1,15 @@
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+
 import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapsActivity extends FragmentActivity implements
@@ -36,6 +35,9 @@ public class MapsActivity extends FragmentActivity implements
     private android.widget.ImageButton menu;
     private android.widget.ImageButton menuExit;
     private android.widget.Button menuPoint1;
+    private android.widget.Button menuPoint2;
+    private android.widget.Button menuPoint3;
+    private android.widget.Button menuPoint4;
 
     public ArrayList<Data> infoList = new ArrayList<>();
 
@@ -47,8 +49,9 @@ public class MapsActivity extends FragmentActivity implements
     private double latitude;
     private double longitude;
     private DownloadTask data1;
-    public CurrentLocation curLoc= null;
+    public CurrentLocation curLoc = null;
     public int distance;
+    private String query;
 
 
     @Override
@@ -64,34 +67,36 @@ public class MapsActivity extends FragmentActivity implements
         menu = (android.widget.ImageButton) findViewById(R.id.menu);
         menuExit = (android.widget.ImageButton) findViewById(R.id.menuExit);
         menuPoint1 = (android.widget.Button) findViewById(R.id.menuPoint1);
+        menuPoint2 = (android.widget.Button) findViewById(R.id.menuPoint2);
+        menuPoint3 = (android.widget.Button) findViewById(R.id.menuPoint3);
+        menuPoint4 = (android.widget.Button) findViewById(R.id.menuPoint4);
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
+
+        if(CurrentLocation.entry()){
+            onSearch();
+        }
 
         getCurrentLocation();
         downloadData();
 
-        try {
-            search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
+            @Override
+            public boolean onQueryTextSubmit(String query1) {
+                menu.setVisibility(View.VISIBLE);
+                query = query1;
+                System.out.println(query1);
+                onSearch();
+                return true;
+            }
 
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    menu.setVisibility(View.VISIBLE);
-                    System.out.println(query);      //not necessary
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    menu.setVisibility(View.INVISIBLE);
-                    System.out.println(newText);    //not necessary
-                    return false;
-                }
-
-            });
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                query = newText;
+                return false;
+            }
+        });
 
         search.setOnClickListener(new SearchView.OnClickListener() {
             @Override
@@ -99,6 +104,7 @@ public class MapsActivity extends FragmentActivity implements
                 menu.setVisibility(View.INVISIBLE);
             }
         });
+
         search.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -106,6 +112,8 @@ public class MapsActivity extends FragmentActivity implements
                 return false;
             }
         });
+
+
         menu.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         LatLng standort = new LatLng(this.latitude, this.longitude);
 
-        googleMap.addMarker(new MarkerOptions().position(standort).title("Standort").icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
+        googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
@@ -139,8 +147,8 @@ public class MapsActivity extends FragmentActivity implements
         }
 
         SavedLocations getLoc = new SavedLocations();
-        ArrayList<ArrayList<Data>> list = new ArrayList<>();
-        ArrayList<Data> infoList1 = new ArrayList<>();
+        ArrayList<ArrayList<Data>> list;
+        ArrayList<Data> infoList1;
 
 
         try {
@@ -166,6 +174,40 @@ public class MapsActivity extends FragmentActivity implements
     }
 
 
+    public void onSearch() {
+        String location;
+
+        if(CurrentLocation.entry()){
+            location = CurrentLocation.getCurLocQuery();
+            CurrentLocation.setEntryFalse();
+
+        } else {
+            location = query;
+        }
+
+        List<android.location.Address> addressList = null;
+
+        if(location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location , 1);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            android.location.Address address = addressList.get(0);
+
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+            this.latitude = latLng.latitude;
+            this.longitude = latLng.longitude;
+
+            CurrentLocation.setCurLoc(latLng);
+        }
+    }
+
 
     public void startStartActivity(){
 
@@ -175,6 +217,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     public void getCurrentLocation(){
+
         try {
         LatLng currentLocation = CurrentLocation.getCurLoc();
 
@@ -199,6 +242,9 @@ public class MapsActivity extends FragmentActivity implements
         menuExit.setVisibility(View.VISIBLE);
         menuOpen.setVisibility(View.VISIBLE);
         menuPoint1.setVisibility(View.VISIBLE);
+        menuPoint2.setVisibility(View.VISIBLE);
+        menuPoint3.setVisibility(View.VISIBLE);
+        menuPoint4.setVisibility(View.VISIBLE);
 
 
         menuExit.setOnClickListener(new View.OnClickListener() {
@@ -237,3 +283,4 @@ public class MapsActivity extends FragmentActivity implements
         startStartActivity();
     }
 }
+

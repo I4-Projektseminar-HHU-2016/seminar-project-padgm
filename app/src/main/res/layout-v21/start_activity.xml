@@ -55,4 +55,22 @@
         android:layout_marginLeft="50dp"
         android:textColor="#a4ffffff" />
 
+    <EditText
+        android:layout_width="222dp"
+        android:layout_height="59dp"
+        android:id="@+id/cityText"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="100dp"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="158dp"
+        android:layout_height="58dp"
+        android:text="check"
+        android:id="@+id/checkButton"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="190dp"
+        android:background="#00d47c"
+        android:textColor="#ffffff" />
+
 </FrameLayout>
