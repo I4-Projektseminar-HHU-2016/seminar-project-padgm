@@ -18,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -48,10 +49,13 @@ public class MapsActivity extends FragmentActivity implements
 
     private double latitude;
     private double longitude;
+    private LatLng curLocQuery;
+    private Marker marker;
     private DownloadTask data1;
     public CurrentLocation curLoc = null;
     public int distance;
     private String query;
+    public boolean checkIfQuery;
 
 
     @Override
@@ -73,21 +77,16 @@ public class MapsActivity extends FragmentActivity implements
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
 
-        if(CurrentLocation.entry()){
-            onSearch();
-        }
 
         getCurrentLocation();
-        downloadData();
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query1) {
                 menu.setVisibility(View.VISIBLE);
-                query = query1;
-                System.out.println(query1);
-                onSearch();
+                curLocQuery = onSearch(query);
+                checkIfQuery = true;
                 return true;
             }
 
@@ -134,56 +133,68 @@ public class MapsActivity extends FragmentActivity implements
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng standort = new LatLng(this.latitude, this.longitude);
+        LatLng standort;
 
-        googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-
-        System.out.println("ORT: " + latitude + " / //// / " + longitude);
-        for (Data info : this.infoList) {
-            LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-            googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
-        }
-
-        SavedLocations getLoc = new SavedLocations();
-        ArrayList<ArrayList<Data>> list;
-        ArrayList<Data> infoList1;
-
-
-        try {
-            list = getLoc.getSavedLocations();
-
-            for(int i = 1; i<list.size(); i++) {
-               System.out.println("TEST!!! " + list.get(i));
-                infoList1 = list.get(i);
-
-                for (Data info : infoList1) {
-                    LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
-                }
-
-            }
-        }catch(NullPointerException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        this.mMap = googleMap;
-    }
-
-
-    public void onSearch() {
-        String location;
-
-        if(CurrentLocation.entry()){
-            location = CurrentLocation.getCurLocQuery();
+        if (CurrentLocation.entry()) {
+            standort = onSearch(CurrentLocation.getCurLocQuery());
             CurrentLocation.setEntryFalse();
-
         } else {
-            location = query;
+            if (checkIfQuery) {
+                standort = curLocQuery;
+            } else {
+                standort = new LatLng(this.latitude, this.longitude);
+            }
         }
+
+            System.out.println("STANDORT: " + standort);
+            downloadData();
+
+            marker = googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
+            System.out.println("ORT: " + latitude + " / //// / " + longitude);
+
+            for (Data info : this.infoList) {
+                LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
+                googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
+            }
+
+            SavedLocations getLoc = new SavedLocations();
+            ArrayList<ArrayList<Data>> list;
+            ArrayList<Data> infoList1;
+
+
+            try {
+                list = getLoc.getSavedLocations();
+
+                for (int i = 1; i < list.size(); i++) {
+                    System.out.println("TEST!!! " + list.get(i));
+                    infoList1 = list.get(i);
+
+                    for (Data info : infoList1) {
+                        LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
+                    }
+
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            this.mMap = googleMap;
+        }
+
+
+    public LatLng onSearch(String location1) {
+
+
+        String location = location1;
+        LatLng standort = null;
+
+        System.out.println("HALLO: " + location);
 
         List<android.location.Address> addressList = null;
 
@@ -199,13 +210,21 @@ public class MapsActivity extends FragmentActivity implements
 
             android.location.Address address = addressList.get(0);
 
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            standort = new LatLng(address.getLatitude(), address.getLongitude());
 
-            this.latitude = latLng.latitude;
-            this.longitude = latLng.longitude;
 
-            CurrentLocation.setCurLoc(latLng);
+            this.latitude = standort.latitude;
+            this.longitude = standort.longitude;
+
+            CurrentLocation.setCurLoc(standort);
+
+            if (checkIfQuery){
+                onMapReady(mMap);
+            }
+
+
         }
+        return standort;
     }
 
 

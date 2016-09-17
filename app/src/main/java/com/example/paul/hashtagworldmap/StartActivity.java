@@ -38,6 +38,7 @@ public class StartActivity extends Activity {
     private ArrayList<Data> infoList = new ArrayList<>();
     private String city;
     private boolean checkButtonOk = false;
+    public boolean toastShowed;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -80,6 +81,11 @@ public class StartActivity extends Activity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                if(toastShowed == false) {
+                    Toast toast = Toast.makeText(StartActivity.this, "nur notwendig bei 'LOKALISIEREN'", Toast.LENGTH_LONG);
+                    toast.show();
+                    toastShowed = true;
+                }
                 String value = String.valueOf(this.change);
                 textView.setText(value + " m");
             }
@@ -108,6 +114,7 @@ public class StartActivity extends Activity {
         exit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CurrentLocation.setCurLoc("Düsseldorf");
                 startMap();
             }
         });
@@ -134,7 +141,6 @@ public class StartActivity extends Activity {
 
     public void search() {
             city = cityText.getText().toString();
-        System.out.println("CITY: " + city);
             CurrentLocation.setCurLoc(city);
             startMap();
     }

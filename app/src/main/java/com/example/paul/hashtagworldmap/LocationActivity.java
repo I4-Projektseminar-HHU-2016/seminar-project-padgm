@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -14,9 +15,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.identity.intents.Address;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by paul on 12.09.16.
@@ -37,11 +42,11 @@ public class LocationActivity extends FragmentActivity implements
 
 
     private TextView latInfo;
-    private TextView lonInfo;
     private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-
+    private double currentLatitude;
+    private double currentLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,6 @@ public class LocationActivity extends FragmentActivity implements
 
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
         latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
-        lonInfo = (android.widget.TextView) findViewById(R.id.lonInfo);
         progressBar.setProgress(20);
 
 
@@ -89,8 +93,23 @@ public class LocationActivity extends FragmentActivity implements
 
         progressBar.setProgress(55);
 
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
+
+
+        Geocoder geocoder = new Geocoder(this);
+        try {
+
+            List<android.location.Address> locationGEO = geocoder.getFromLocation(this.currentLatitude, this.currentLongitude, 1);
+            android.location.Address adress = locationGEO.get(0);
+            String locationString = adress.toString();
+            latInfo.setText(locationString);
+            System.out.println(locationString);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
@@ -117,9 +136,6 @@ public class LocationActivity extends FragmentActivity implements
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
-
-            latInfo.setText(String.valueOf(location.getLatitude()));
-            lonInfo.setText(String.valueOf(location.getLongitude()));
             handleNewLocation(location);
         }
     }

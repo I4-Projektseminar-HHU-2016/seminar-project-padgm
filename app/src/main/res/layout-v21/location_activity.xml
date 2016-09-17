@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="DEINE KOORDINATEN:"
+        android:text="deine location:"
         android:id="@+id/geoText"
         android:layout_gravity="center_horizontal"
         android:allowUndo="true"
@@ -21,38 +21,14 @@
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="LÄNGENGRAD:"
-        android:id="@+id/lonText"
-        android:allowUndo="true"
-        android:textColor="#ffffff"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_gravity="left|center_vertical" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="BREITENGRAD:"
-        android:id="@+id/latText"
-        android:allowUndo="true"
-        android:textColor="#ffffff"
-        android:layout_marginLeft="50dp"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginBottom="50dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="272dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/latInfo"
         android:allowUndo="true"
         android:textColor="#ffffff"
         android:layout_marginLeft="50dp"
-        android:layout_gravity="right|center_vertical"
+        android:layout_gravity="center_vertical"
         android:layout_marginBottom="50dp"
         android:layout_marginRight="50dp" />
 
