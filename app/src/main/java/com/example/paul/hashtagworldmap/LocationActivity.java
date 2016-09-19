@@ -47,6 +47,8 @@ public class LocationActivity extends FragmentActivity implements
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
+    private String locationString;
+    private android.location.Address adress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,46 +95,36 @@ public class LocationActivity extends FragmentActivity implements
 
         progressBar.setProgress(55);
 
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
+        this.currentLatitude = location.getLatitude();
+        this.currentLongitude = location.getLongitude();
 
 
         Geocoder geocoder = new Geocoder(this);
         try {
 
             List<android.location.Address> locationGEO = geocoder.getFromLocation(this.currentLatitude, this.currentLongitude, 1);
-            android.location.Address adress = locationGEO.get(0);
-            String locationString = adress.toString();
-            latInfo.setText(locationString);
-            System.out.println(locationString);
+            this.adress = locationGEO.get(0);
+            this.locationString = this.adress.getLocality();
+            latInfo.setText(this.locationString);
+            System.out.println(this.locationString);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-
-
-
+        LatLng latLng = new LatLng(this.currentLatitude, this.currentLongitude);
         setCurLoc(latLng);
 
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+       Location location = null;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
-        progressBar.setProgress(40);
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
