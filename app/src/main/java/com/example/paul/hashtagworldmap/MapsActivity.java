@@ -1,9 +1,11 @@
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -112,7 +114,6 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
-
         menu.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +162,8 @@ public class MapsActivity extends FragmentActivity implements
             }
 
             SavedLocations getLoc = new SavedLocations();
+            getLoc.setNewLocations(this.infoList);
+
             ArrayList<ArrayList<Data>> list;
             ArrayList<Data> infoList1;
 
@@ -174,7 +177,7 @@ public class MapsActivity extends FragmentActivity implements
 
                     for (Data info : infoList1) {
                         LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-                        googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
+                        marker = googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
                     }
 
                 }
@@ -208,9 +211,8 @@ public class MapsActivity extends FragmentActivity implements
                 e.printStackTrace();
             }
 
-            android.location.Address address = addressList.get(0);
-
-            standort = new LatLng(address.getLatitude(), address.getLongitude());
+                android.location.Address address = addressList.get(0);
+                standort = new LatLng(address.getLatitude(), address.getLongitude());
 
 
             this.latitude = standort.latitude;
@@ -222,7 +224,6 @@ public class MapsActivity extends FragmentActivity implements
                 onMapReady(mMap);
             }
 
-
         }
         return standort;
     }
@@ -232,6 +233,13 @@ public class MapsActivity extends FragmentActivity implements
 
         Intent startScreen = new Intent(this, StartActivity.class);
         startActivity(startScreen);
+
+    }
+
+    public void startImp(){
+
+        Intent startImp = new Intent(this, ImpressumActivity.class);
+        startActivity(startImp);
 
     }
 
@@ -282,6 +290,34 @@ public class MapsActivity extends FragmentActivity implements
                 menu.setVisibility(View.INVISIBLE);
             }
         });
+        menuPoint2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/locationaroundu/"));
+                startActivity(browserIntent);
+
+            }
+        });
+
+        menuPoint3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startImp();
+            }
+        });
+
+        menuPoint4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                LocationActivity endLoc = new LocationActivity();
+                endLoc.finish();
+                StartActivity endStart = new StartActivity();
+                endLoc.finish();
+            }
+        });
+
     }
 
     public void restart() {

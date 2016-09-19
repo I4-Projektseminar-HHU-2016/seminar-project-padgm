@@ -121,10 +121,10 @@ public class LocationActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
        Location location = null;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            return;
         }
 
-
+        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {

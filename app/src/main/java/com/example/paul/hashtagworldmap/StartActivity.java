@@ -54,19 +54,27 @@ public class StartActivity extends Activity {
         seekBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
         exit = (android.widget.ImageButton) findViewById(R.id.exit);
 
-        cityText.setOnClickListener(new SearchView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                city = cityText.getText().toString();
-            }
-        });
 
-        checkButton.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                search();
-            }
-        });
+
+        cityText.setOnClickListener(new SearchView.OnClickListener() {
+                @Override
+                public void onClick(View v) {city = cityText.getText().toString();
+                }
+            });
+
+
+            checkButton.setOnClickListener(new Button.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(cityText.getText().length() != 0) {
+                        search();
+                    } else {
+                        Toast toast = Toast.makeText(StartActivity.this, "Bitte gib einen Ort ein.", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+            });
+
 
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
