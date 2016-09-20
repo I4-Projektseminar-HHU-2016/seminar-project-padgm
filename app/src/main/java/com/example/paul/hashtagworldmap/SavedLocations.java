@@ -13,12 +13,14 @@ public class SavedLocations {
     ArrayList<ArrayList<Data>> list = new ArrayList<>();
 
     public void setNewLocations(ArrayList<Data> infoList) {
+        System.out.println("SAVED!");
+
         this.infoList = infoList;
         list.add(this.infoList);
 
     }
 
-    public ArrayList<ArrayList<Data>> getSavedLocations() throws IOException {
+    public ArrayList<ArrayList<Data>> getSavedLocations(){
 
         return list;
 

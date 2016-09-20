@@ -48,7 +48,10 @@ public class StartActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_activity);
-
+        if(!toastShowed) {
+            Toast.makeText(this, "Bitte aktiviere Internet und GPS, ansonsten wird die App abstürzen oder nicht korrekt ausgeführt.", Toast.LENGTH_LONG).show();
+            toastShowed = true;
+        }
         checkButton = (android.widget.Button) findViewById(R.id.checkButton);
         cityText = (android.widget.EditText) findViewById(R.id.cityText);
         signInButton = (android.widget.Button) findViewById(R.id.button);

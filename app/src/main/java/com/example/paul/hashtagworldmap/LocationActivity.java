@@ -72,15 +72,14 @@ public class LocationActivity extends FragmentActivity implements
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        System.out.println("latitude: " + this.currentLatitude);
         progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
-        latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
-
+        progressBar.setProgress(20);
     }
 
     @Override
     protected void onResume() {
         System.out.println("latitude1: " + this.currentLatitude);
+        progressBar.setProgress(40);
         super.onResume();
         mGoogleApiClient.connect();
     }
@@ -100,13 +99,12 @@ public class LocationActivity extends FragmentActivity implements
         Log.d(TAG, location.toString());
 
         System.out.println("latitude2: " + this.currentLatitude);
-
+        progressBar.setProgress(80);
         this.currentLatitude = location.getLatitude();
         this.currentLongitude = location.getLongitude();
 
         LatLng latLng = new LatLng(this.currentLatitude, this.currentLongitude);
 
-        setLocationAsText();
         setCurLoc(latLng);
     }
 
@@ -120,12 +118,14 @@ public class LocationActivity extends FragmentActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
             System.out.println("test");
+            progressBar.setProgress(60);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
         else {
             try {
                 System.out.println("latitude3: " + this.currentLatitude);
                 handleNewLocation(location);
+                progressBar.setProgress(60);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -180,7 +180,7 @@ public class LocationActivity extends FragmentActivity implements
 
     public void startMap() {
 
-
+        progressBar.setProgress(100);
         Intent startMap = new Intent(this, MapsActivity.class);
         startActivity(startMap);
 
@@ -188,20 +188,10 @@ public class LocationActivity extends FragmentActivity implements
 
     public void setCurLoc(LatLng curLocLatLng) {
 
+        progressBar.setProgress(90);
         CurrentLocation.setCurLoc(curLocLatLng);
         startMap();
 
     }
 
-    public void setLocationAsText() throws IOException {
-
-        Geocoder geocoder = new Geocoder(this);
-
-        List<android.location.Address> locationGEO = geocoder.getFromLocation(this.currentLatitude, this.currentLongitude, 1);
-        this.adress = locationGEO.get(0);
-        this.locationString = this.adress.getLocality();
-        this.latInfo.setText(this.locationString);
-        System.out.println(this.locationString);
-
-    }
 }

@@ -78,24 +78,13 @@ public class DownloadTask{
                 }
             }
 
-        } catch (JSONException e) {
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         System.out.println("INFOLIST1: " + String.valueOf(infoList1));
         this.infoList = infoList1;
 
-        saveLocation();
     }
 
-
-
-    public void saveLocation(){
-
-        SavedLocations newLoc = new SavedLocations();
-        newLoc.setNewLocations(this.infoList);
-
-    }
 }

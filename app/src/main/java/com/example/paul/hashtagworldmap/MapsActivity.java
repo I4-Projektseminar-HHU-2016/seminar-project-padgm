@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements
     public int distance;
     private String query;
     public boolean checkIfQuery;
+    public  SavedLocations getLoc = new SavedLocations();
 
 
     @Override
@@ -69,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapsActivity.this);
+
 
         menu = (android.widget.ImageButton) findViewById(R.id.menu);
         menuExit = (android.widget.ImageButton) findViewById(R.id.menuExit);
@@ -150,6 +153,7 @@ public class MapsActivity extends FragmentActivity implements
             System.out.println("STANDORT: " + standort);
             downloadData();
 
+            getLoc.setNewLocations(this.infoList);
             marker = googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
@@ -160,9 +164,6 @@ public class MapsActivity extends FragmentActivity implements
                 LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
                 googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
             }
-
-            SavedLocations getLoc = new SavedLocations();
-            getLoc.setNewLocations(this.infoList);
 
             ArrayList<ArrayList<Data>> list;
             ArrayList<Data> infoList1;
@@ -179,15 +180,12 @@ public class MapsActivity extends FragmentActivity implements
                         LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
                         marker = googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
                     }
-
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
-            this.mMap = googleMap;
+        this.mMap = googleMap;
         }
 
 
