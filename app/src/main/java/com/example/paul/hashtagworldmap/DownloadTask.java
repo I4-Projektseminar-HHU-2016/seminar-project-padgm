@@ -29,13 +29,16 @@ public class DownloadTask{
         this.count = count;
     }
 
-    public ArrayList<Data> getData(){      // getter für Daten der API
+    // getter für Daten der API
+    public ArrayList<Data> getData(){
         getInfo();
 
         return this.infoList;
     }
 
-    public void getInfo() {      // Zugriff auf Instagram API via Link
+
+    // Zugriff auf Instagram API via Link
+    public void getInfo() {
 
         if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -47,7 +50,7 @@ public class DownloadTask{
         String endpoint = "locations/search?lat=" + latFromLoc + "&lng=" + lonFromLoc + "&distance=" + distance + "&count=" + count +"&access_token=2016498856.08ab859.910c92509e904a4cb1a02dfc71d54015";
 
         List<NameValuePair> params = new ArrayList<>();
-        InstagramRequest request = new InstagramRequest();                                  // externes Modul AndroidInsta (hier musste über Import Modul ein externes Modul importiert werden, dass anschließend als Dependecy hinzugefügt wurde)
+        InstagramRequest request = new InstagramRequest();                                  // externes Modul AndroidInsta (hier musste über Import Modul ein externes Modul importiert werden, dass anschließend als Dependency hinzugefügt wurde)
 
 
         try {
@@ -55,7 +58,7 @@ public class DownloadTask{
 
 
             JSONObject jsonObj = (JSONObject) new JSONTokener(getRequestJSON).nextValue();  // JSON-Format auslesen
-            JSONArray jsonData = jsonObj.getJSONArray("data");                            // JSON-Format auslesen
+            JSONArray jsonData = jsonObj.getJSONArray("data");
             JSONObject meta = jsonObj.getJSONObject("meta");
             int code = meta.getInt("code");
 

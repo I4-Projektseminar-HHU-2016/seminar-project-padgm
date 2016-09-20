@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * Created by paul on 12.09.16.
+ * etwas modifiziert Variante von: http://blog.teamtreehouse.com/beginners-guide-location-android
  */
 
 public class LocationActivity extends FragmentActivity implements
@@ -49,7 +50,7 @@ public class LocationActivity extends FragmentActivity implements
      */
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
+    private int TAG_CODE_PERMISSION_LOCATION = 1252;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -111,8 +112,12 @@ public class LocationActivity extends FragmentActivity implements
     @Override
     public void onConnected(Bundle bundle){
 
+        //checks permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    TAG_CODE_PERMISSION_LOCATION);
             return;
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -124,8 +129,8 @@ public class LocationActivity extends FragmentActivity implements
         else {
             try {
                 System.out.println("latitude3: " + this.currentLatitude);
-                handleNewLocation(location);
                 progressBar.setProgress(60);
+                handleNewLocation(location);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -178,6 +183,10 @@ public class LocationActivity extends FragmentActivity implements
         }
     }
 
+
+    // ------ WEITERE METHODEN -------
+
+    //startet MapActivity und setzt ProgressBar auf 100
     public void startMap() {
 
         progressBar.setProgress(100);
@@ -186,6 +195,7 @@ public class LocationActivity extends FragmentActivity implements
 
     }
 
+    //setzt CurrentLocation von dem ermittelten Ort und progress auf 90
     public void setCurLoc(LatLng curLocLatLng) {
 
         progressBar.setProgress(90);

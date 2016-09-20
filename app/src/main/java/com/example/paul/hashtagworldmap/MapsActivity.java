@@ -1,3 +1,8 @@
+
+    /*
+    *       MapActivity zeigt GoogleMap an + Marker
+    */
+
 package com.example.paul.hashtagworldmap;
 
 import android.Manifest;
@@ -46,10 +51,6 @@ public class MapsActivity extends FragmentActivity implements
     public ArrayList<Data> infoList = new ArrayList<>();
 
 
-    private static final String CLIENT_ID = "08ab859c63e742688aab1fbd1c0a6d7f";
-    private static final String CLIENT_SECRET = "94b68417b375459d97bdd5f5479449ed";
-    private static final String REDIRECT_URI = "http://localhost";
-
     private double latitude;
     private double longitude;
     private LatLng curLocQuery;
@@ -68,11 +69,13 @@ public class MapsActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        //Map einbindung als Fragment vom layout activity_maps
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapsActivity.this);
 
 
+        //Initialisierung aller xml Elemente
         menu = (android.widget.ImageButton) findViewById(R.id.menu);
         menuExit = (android.widget.ImageButton) findViewById(R.id.menuExit);
         menuPoint1 = (android.widget.Button) findViewById(R.id.menuPoint1);
@@ -82,9 +85,13 @@ public class MapsActivity extends FragmentActivity implements
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
 
-
+        //zu Beginn die aktuelle Loction erhalten
         getCurrentLocation();
 
+
+        // ------ Listener ------
+
+        //Listener für die SearchView, die nach Google Locations sucht
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -102,6 +109,7 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+        //Listener der auf das Öffnen der SearchView reagiert
         search.setOnClickListener(new SearchView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +117,8 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+
+        //Listener der auf das Schließen der SearchView reagiert
         search.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -117,6 +127,7 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+        //Listener für das Menu, das ausgeklappt wird
         menu.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +150,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         LatLng standort;
 
+        //Überprüfung, ob die Location eine Sucheingabe ist oder über die LocationActivity kommt
         if (CurrentLocation.entry()) {
             standort = onSearch(CurrentLocation.getCurLocQuery());
             CurrentLocation.setEntryFalse();
@@ -150,56 +162,65 @@ public class MapsActivity extends FragmentActivity implements
             }
         }
 
-            System.out.println("STANDORT: " + standort);
-            downloadData();
+        System.out.println("STANDORT: " + standort);
 
-            getLoc.setNewLocations(this.infoList);
-            marker = googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
-            googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-
-            System.out.println("ORT: " + latitude + " / //// / " + longitude);
-
-            for (Data info : this.infoList) {
-                LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
-            }
-
-            ArrayList<ArrayList<Data>> list;
-            ArrayList<Data> infoList1;
+        //download Daten für die Marker
+        downloadData();
 
 
-            try {
-                list = getLoc.getSavedLocations();
+        getLoc.setNewLocations(this.infoList);
 
-                for (int i = 1; i < list.size(); i++) {
-                    System.out.println("TEST!!! " + list.get(i));
-                    infoList1 = list.get(i);
+        //Marker für den Standort setzen
+        marker = googleMap.addMarker(new MarkerOptions().position(standort).icon(BitmapDescriptorFactory.fromResource(R.mipmap.standort)));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(standort));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
-                    for (Data info : infoList1) {
-                        LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
-                        marker = googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
-                    }
+
+        System.out.println("ORT: " + latitude + " / //// / " + longitude);
+
+        // Setze Marker von Instagram um die Location (die Locations um den wirklichen Standort/sowie angeklickte Locations bekommen rote Marker)
+        for (Data info : this.infoList) {
+            LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker1)));
+        }
+
+        ArrayList<ArrayList<Data>> list;
+        ArrayList<Data> infoList1;
+
+
+        try {
+
+            //Zuvor gesicherte Marker(Locations)
+            list = getLoc.getSavedLocations();
+
+            for (int i = 1; i < list.size(); i++) {
+                System.out.println("TEST!!! " + list.get(i));
+                infoList1 = list.get(i);
+
+                //setze Marker von vorherigen Locations
+                for (Data info : infoList1) {
+                    LatLng neu = new LatLng(info.getLatitude(), info.getLongitude());
+                    marker = googleMap.addMarker(new MarkerOptions().position(neu).title(info.getLocName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker2)));
                 }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         this.mMap = googleMap;
         }
 
-
+    //Suche für SearchView
     public LatLng onSearch(String location1) {
-
 
         String location = location1;
         LatLng standort = null;
 
-        System.out.println("HALLO: " + location);
-
         List<android.location.Address> addressList = null;
 
         if(location != null || !location.equals("")) {
+
+            // Geocoder bietet die Möglichkeit aus einer Eingabe eine Location mit Längen- und Breitengrad zu ziehen
             Geocoder geocoder = new Geocoder(this);
             try {
                 addressList = geocoder.getFromLocationName(location , 1);
@@ -226,7 +247,7 @@ public class MapsActivity extends FragmentActivity implements
         return standort;
     }
 
-
+    //Startet StartActivity
     public void startStartActivity(){
 
         Intent startScreen = new Intent(this, StartActivity.class);
@@ -234,6 +255,7 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+    //Startet ImpressumActivity
     public void startImp(){
 
         Intent startImp = new Intent(this, ImpressumActivity.class);
@@ -241,6 +263,8 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+
+    //Nimmt von CurrentLocation den aktuellen Standort als LatLng
     public void getCurrentLocation(){
 
         try {
@@ -254,6 +278,8 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+
+    //nutzt den DownloadTask um an die ArrayList an Daten zu gelangen
     public void downloadData(){
 
         data1 = new DownloadTask();
@@ -262,6 +288,7 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+    //das Menu läuft auf dem gleichen Layout wie die Map, sodass hier mit Sichtbarkeit gearbeitet wird
     private void openMenu() {
         menu.setVisibility(View.INVISIBLE);
         menuExit.setVisibility(View.VISIBLE);
@@ -271,7 +298,9 @@ public class MapsActivity extends FragmentActivity implements
         menuPoint3.setVisibility(View.VISIBLE);
         menuPoint4.setVisibility(View.VISIBLE);
 
+        // ------ LISTENER -------
 
+        //Listener für ExitButton aus dem Menu
         menuExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -280,6 +309,7 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+        //Listener für Button 1 und dem Zurückkehren zur StartActivity damit ein neuer Radius eingestellt werden könnte
         menuPoint1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,6 +318,8 @@ public class MapsActivity extends FragmentActivity implements
                 menu.setVisibility(View.INVISIBLE);
             }
         });
+
+        //Listener für Button 2 um zur InstagramSeite und Instagram zu gelangen
         menuPoint2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,6 +330,7 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+        //Listener für Button 3 um zum Impressum zu gelangen
         menuPoint3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,6 +338,9 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+
+        //Listener für Button 4 um App zu beenden
+        //dabei wird StartActivity mit putExtra ("EXIT", true) gestartet, sodass diese beendet wird
         menuPoint4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,6 +353,7 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
+    //App auf Null setzen und zu StartActivity navigieren
     public void restart() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

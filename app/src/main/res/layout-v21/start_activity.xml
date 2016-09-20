@@ -6,6 +6,16 @@
     style="@style/AppTheme"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+        android:text="Anzahl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="50dp"
+        android:textColor="#a4ffffff" />
+
     <Button
         android:layout_width="158dp"
         android:layout_height="58dp"
@@ -16,8 +26,7 @@
         android:background="#00d47c"
         android:textColor="#ffffff"
         android:elegantTextHeight="false"
-        android:contextClickable="false"
-        android:clickable="true" />
+        android:contextClickable="false" />
 
     <ImageButton
         android:layout_width="34dp"

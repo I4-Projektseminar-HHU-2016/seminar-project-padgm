@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 /**
  *
  * Created by paul on 19.09.16.
+ * öffnet das Impressum
  */
 public class ImpressumActivity extends FragmentActivity {
 
