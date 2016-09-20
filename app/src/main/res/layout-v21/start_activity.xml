@@ -34,6 +34,13 @@
         android:id="@+id/seekBar"
         android:layout_gravity="center" />
 
+    <SeekBar
+        android:layout_width="278dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarCount"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,5 +79,14 @@
         android:layout_marginTop="190dp"
         android:background="#00d47c"
         android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewCount"
+        android:layout_marginTop="130dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="right|center_vertical"
+        android:textColor="#a4ffffff" />
 
 </FrameLayout>

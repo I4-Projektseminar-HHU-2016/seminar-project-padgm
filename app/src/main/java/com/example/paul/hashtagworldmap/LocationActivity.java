@@ -6,12 +6,14 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,9 +28,18 @@ import java.util.List;
 /**
  * Created by paul on 12.09.16.
  */
+
 public class LocationActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+
+
+    private TextView latInfo;
+    private ProgressBar progressBar;
+    public double currentLatitude;
+    public double currentLongitude;
+    private String locationString;
+    private android.location.Address adress;
 
     public static final String TAG = MapsActivity.class.getSimpleName();
 
@@ -36,28 +47,17 @@ public class LocationActivity extends FragmentActivity implements
      * Define a request code to send to Google Play services
      * This code is returned in Activity.onActivityResult
      */
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
 
-
-
-    private TextView latInfo;
-    private ProgressBar progressBar;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private double currentLatitude;
-    private double currentLongitude;
-    private String locationString;
-    private android.location.Address adress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_activity);
-
-        progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
-        latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
-        progressBar.setProgress(20);
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -71,10 +71,16 @@ public class LocationActivity extends FragmentActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
+        System.out.println("latitude: " + this.currentLatitude);
+        progressBar = (android.widget.ProgressBar) findViewById(R.id.progressBar);
+        latInfo = (android.widget.TextView) findViewById(R.id.latInfo);
+
     }
 
     @Override
     protected void onResume() {
+        System.out.println("latitude1: " + this.currentLatitude);
         super.onResume();
         mGoogleApiClient.connect();
     }
@@ -90,45 +96,39 @@ public class LocationActivity extends FragmentActivity implements
     }
 
 
-    private void handleNewLocation(Location location) {
+    private void handleNewLocation(Location location) throws IOException {
         Log.d(TAG, location.toString());
 
-        progressBar.setProgress(55);
+        System.out.println("latitude2: " + this.currentLatitude);
 
         this.currentLatitude = location.getLatitude();
         this.currentLongitude = location.getLongitude();
 
-
-        Geocoder geocoder = new Geocoder(this);
-        try {
-
-            List<android.location.Address> locationGEO = geocoder.getFromLocation(this.currentLatitude, this.currentLongitude, 1);
-            this.adress = locationGEO.get(0);
-            this.locationString = this.adress.getLocality();
-            latInfo.setText(this.locationString);
-            System.out.println(this.locationString);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         LatLng latLng = new LatLng(this.currentLatitude, this.currentLongitude);
-        setCurLoc(latLng);
 
+        setLocationAsText();
+        setCurLoc(latLng);
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-       Location location = null;
+    public void onConnected(Bundle bundle){
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             return;
         }
-
-        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
+            System.out.println("test");
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } else {
-            handleNewLocation(location);
+        }
+        else {
+            try {
+                System.out.println("latitude3: " + this.currentLatitude);
+                handleNewLocation(location);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -145,6 +145,7 @@ public class LocationActivity extends FragmentActivity implements
          * start a Google Play services activity that can resolve
          * error.
          */
+
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
@@ -153,8 +154,9 @@ public class LocationActivity extends FragmentActivity implements
                  * Thrown if Google Play services canceled the original
                  * PendingIntent
                  */
+
             } catch (IntentSender.SendIntentException e) {
-                // Log the error
+                        // Log the error
                 e.printStackTrace();
             }
         } else {
@@ -162,30 +164,44 @@ public class LocationActivity extends FragmentActivity implements
              * If no resolution is available, display a dialog to the
              * user with the error.
              */
+
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        handleNewLocation(location);
+        try {
+            handleNewLocation(location);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void startMap(){
+    public void startMap() {
 
-        progressBar.setProgress(90);
-        progressBar.setProgress(100);
 
         Intent startMap = new Intent(this, MapsActivity.class);
         startActivity(startMap);
+
     }
 
-    public void setCurLoc(LatLng curLocLatLng){
-
-        progressBar.setProgress(80);
+    public void setCurLoc(LatLng curLocLatLng) {
 
         CurrentLocation.setCurLoc(curLocLatLng);
         startMap();
+
+    }
+
+    public void setLocationAsText() throws IOException {
+
+        Geocoder geocoder = new Geocoder(this);
+
+        List<android.location.Address> locationGEO = geocoder.getFromLocation(this.currentLatitude, this.currentLongitude, 1);
+        this.adress = locationGEO.get(0);
+        this.locationString = this.adress.getLocality();
+        this.latInfo.setText(this.locationString);
+        System.out.println(this.locationString);
 
     }
 }

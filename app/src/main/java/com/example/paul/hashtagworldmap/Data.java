@@ -8,9 +8,7 @@ public class Data {
     public Double longitude = 0.0;
     public String name = "";
 
-    public void setLatitude(double latitude){
-        this.latitude=latitude;
-    }
+    public void setLatitude(double latitude){ this.latitude=latitude; }
 
     public void setLongitude(double longitude){
         this.longitude=longitude;
@@ -19,6 +17,7 @@ public class Data {
     public void setLocName(String  name){
         this.name=name;
     }
+
 
     public Double getLatitude() {
         return this.latitude;

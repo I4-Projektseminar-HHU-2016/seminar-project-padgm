@@ -259,7 +259,7 @@ public class MapsActivity extends FragmentActivity implements
     public void downloadData(){
 
         data1 = new DownloadTask();
-        data1.setLoc(this.latitude, this.longitude, StartActivity.getDistance());
+        data1.setLoc(this.latitude, this.longitude, StartActivity.getDistance(), StartActivity.getCount());
         infoList = data1.getData();
 
     }
@@ -310,11 +310,10 @@ public class MapsActivity extends FragmentActivity implements
         menuPoint4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                LocationActivity endLoc = new LocationActivity();
-                endLoc.finish();
-                StartActivity endStart = new StartActivity();
-                endLoc.finish();
+                Intent intent = new Intent(getApplicationContext(), StartActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("EXIT", true);
+                startActivity(intent);
             }
         });
 

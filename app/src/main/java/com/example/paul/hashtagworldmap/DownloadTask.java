@@ -19,12 +19,14 @@ public class DownloadTask{
     public double latFromLoc;
     public double lonFromLoc;
     public int distance;
+    public int count;
 
 
-    public void setLoc(double latitude, double longitude, int distance){
+    public void setLoc(double latitude, double longitude, int distance, int count){
         this.latFromLoc = latitude;
         this.lonFromLoc = longitude;
         this.distance = distance;
+        this.count = count;
     }
 
     public ArrayList<Data> getData(){      // getter für Daten der API
@@ -42,7 +44,7 @@ public class DownloadTask{
         ArrayList<Data> infoList1 = new ArrayList<>();
 
 
-        String endpoint = "locations/search?lat=" + latFromLoc + "&lng=" + lonFromLoc + "&distance=" + distance + "&access_token=2016498856.08ab859.910c92509e904a4cb1a02dfc71d54015";
+        String endpoint = "locations/search?lat=" + latFromLoc + "&lng=" + lonFromLoc + "&distance=" + distance + "&count=" + count +"&access_token=2016498856.08ab859.910c92509e904a4cb1a02dfc71d54015";
 
         List<NameValuePair> params = new ArrayList<>();
         InstagramRequest request = new InstagramRequest();                                  // externes Modul AndroidInsta (hier musste über Import Modul ein externes Modul importiert werden, dass anschließend als Dependecy hinzugefügt wurde)
