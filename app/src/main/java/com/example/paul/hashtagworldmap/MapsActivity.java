@@ -207,6 +207,24 @@ public class MapsActivity extends FragmentActivity implements
             e.printStackTrace();
         }
 
+        //
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String hashtag = marker.getTitle();
+                hashtag = hashtag.replaceAll(" +","");
+                hashtag = hashtag.replaceAll(",", "");
+                hashtag = hashtag.replaceAll(":", "");
+                hashtag = hashtag.replaceAll(";", "");
+                hashtag = hashtag.replaceAll("'", "");
+                hashtag = hashtag.replaceAll("\"", "");
+                hashtag = hashtag.replaceAll("\\p{Punct}", "");
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/explore/tags/" + hashtag + "/"));
+                startActivity(browserIntent);
+
+            }
+        });
         this.mMap = googleMap;
         }
 
