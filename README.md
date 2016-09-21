@@ -18,7 +18,7 @@ Um die App nutzen zu können benötigt es entweder einen Android Emulator für d
 
 ###Installieren auf einem Emulator
 
-Für Windows und Mac OS bietet sich bspw. der Emulator [Andy]http://www.andyroid.net  an, da dort APKs installiert werden können und ganz allgemein über eine Virtual Box läuft. Hier muss die Installation emulatorspezifisch geschehen. In den meisten Fällen sieht es so aus wie beim Smartphone selbst.
+Für Windows und Mac OS bietet sich bspw. der Emulator [Andy](http://www.andyroid.net) an, da dort APKs installiert werden können und ganz allgemein über eine Virtual Box läuft. Hier muss die Installation emulatorspezifisch geschehen. In den meisten Fällen sieht es so aus wie beim Smartphone selbst.
 
 ##Entwicklung
 
