@@ -4,7 +4,7 @@
 
 ##Installieren der App
 
-Die App liegt in vor einer apk-Datei vor: 'aroundU.apk'.
+Die App liegt als apk-Datei vor: 'aroundU.apk'.
 Um die App nutzen zu können benötigt es entweder einen Android Emulator für den Computer oder ein Android Smartphone. Dabei sollte die Android Version 5.1 Lollipop oder höher sein mit Google Api 22+.
 
 ###Installieren auf dem Smartphone
@@ -18,7 +18,7 @@ Um die App nutzen zu können benötigt es entweder einen Android Emulator für d
 
 ###Installieren auf einem Emulator
 
-Für Windows und Mac OS bietet sich bspw. der Emulator Andy an, da dort APKs installiert werden können und ganz allgemein über eine Virtual Box läuft. Hier muss die Installation Emulatorspezifisch geschehen. In den meisten Fällen sieht es so aus wie beim Smartphone selbst.
+Für Windows und Mac OS bietet sich bspw. der Emulator [Andy]http://www.andyroid.net  an, da dort APKs installiert werden können und ganz allgemein über eine Virtual Box läuft. Hier muss die Installation emulatorspezifisch geschehen. In den meisten Fällen sieht es so aus wie beim Smartphone selbst.
 
 ##Entwicklung
 
