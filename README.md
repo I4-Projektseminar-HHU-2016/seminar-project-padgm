@@ -4,16 +4,15 @@
 
 
 
-![Man kann ein Ort eingeben, Anzahl der Orte wählen und auch den Radius einstellen.](bild1.png "Auswahl und Eingabe")
+![](bild1.png "Auswahl und Eingabe")
+Man kann ein Ort eingeben, Anzahl der Orte wählen und auch den Radius einstellen.
 
+![](bild2.png "Köln")
 
+Angezeigt wird Köln mit den umgebenden Orten.
 
-![Angezeigt wird Köln mit den umgebenden Orten.](bild2.png "Köln")
-
-
-
-![Aktuell (21.09.2016) läuft hier bspw. die größte Photographie-Messe der Welt, die Photokina.](bild3.png "photokina")
-
+![](bild3.png "photokina")
+Aktuell (21.09.2016) läuft hier bspw. die größte Photographie-Messe der Welt, die Photokina.
 ##Installieren der App
 
 Die App liegt als apk-Datei vor: "aroundU.apk".
