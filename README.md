@@ -1,4 +1,4 @@
-#Location Around You (Android App) ![](logo.png)
+#LAY! ![](logo.png)
 
 'Location Around You' ist eine Android Application, die es ermöglicht bei Instagram genutzte und eigentragene Locations in der direkten Umgebung, aber auch an konkret gesuchten Orten anzuzeigen.
 

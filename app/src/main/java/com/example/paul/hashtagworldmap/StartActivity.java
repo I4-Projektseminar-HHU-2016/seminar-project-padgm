@@ -1,13 +1,17 @@
 package com.example.paul.hashtagworldmap;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -213,4 +217,5 @@ public class StartActivity extends Activity {
             CurrentLocation.setCurLoc(city);
             startMap();
     }
+
 }

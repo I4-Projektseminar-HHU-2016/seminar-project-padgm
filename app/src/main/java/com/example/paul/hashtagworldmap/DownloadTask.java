@@ -65,7 +65,7 @@ public class DownloadTask{
 
             for (int i = 0; i < jsonData.length(); i++) {
 
-                Data info = new Data();
+                Data info = new Data();     //Data() als Zwischenspeicherung
                 JSONObject k = jsonData.getJSONObject(i);
 
                 info.setLatitude(k.getDouble("latitude"));

@@ -42,17 +42,17 @@
 
         <activity
             android:name=".LocationActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
 
         <activity
             android:name=".MapsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
 
         <activity
             android:name=".ImpressumActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
 
 

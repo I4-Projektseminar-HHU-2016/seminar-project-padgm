@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.nearby.connection.Connections;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class MapsActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        //Map einbindung als Fragment vom layout activity_maps
+        //Map Einbindung als Fragment vom layout activity_maps
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapsActivity.this);
@@ -85,6 +86,7 @@ public class MapsActivity extends FragmentActivity implements
         search = (android.widget.SearchView) findViewById(R.id.searchView);
         menuOpen = (android.widget.FrameLayout) findViewById(R.id.menuOpen);
 
+        menu.setVisibility(View.VISIBLE);
         //zu Beginn die aktuelle Loction erhalten
         getCurrentLocation();
 
@@ -358,14 +360,16 @@ public class MapsActivity extends FragmentActivity implements
 
 
         //Listener für Button 4 um App zu beenden
-        //dabei wird StartActivity mit putExtra ("EXIT", true) gestartet, sodass diese beendet wird
+        //dabei wird jeweils die Activity mit putExtra ("EXIT", true) gestartet, sodass diese beendet wird
         menuPoint4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(), StartActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("EXIT", true);
                 startActivity(intent);
+
             }
         });
 
@@ -389,5 +393,6 @@ public class MapsActivity extends FragmentActivity implements
 
         startStartActivity();
     }
+
 }
 
