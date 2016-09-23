@@ -26,8 +26,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by paul on 12.09.16.
- * etwas modifiziert Variante von: http://blog.teamtreehouse.com/beginners-guide-location-android
+ *
+ * Folgende Lösung (Zeile 34-185)für die Ermittlung des Standortes habe ich einem Tutorial auf blog.teamtreehouse.com
+ * entnommen und etwas modifiziert. Link: http://blog.teamtreehouse.com/beginners-guide-location-android
+ *
  */
 
 public class LocationActivity extends FragmentActivity implements

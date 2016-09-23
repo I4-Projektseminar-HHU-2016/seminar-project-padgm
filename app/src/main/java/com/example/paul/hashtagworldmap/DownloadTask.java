@@ -50,7 +50,7 @@ public class DownloadTask{
         String endpoint = "locations/search?lat=" + latFromLoc + "&lng=" + lonFromLoc + "&distance=" + distance + "&count=" + count +"&access_token=2016498856.08ab859.910c92509e904a4cb1a02dfc71d54015";
 
         List<NameValuePair> params = new ArrayList<>();
-        InstagramRequest request = new InstagramRequest();                                  // externes Modul AndroidInsta (hier musste über Import Modul ein externes Modul importiert werden, dass anschließend als Dependency hinzugefügt wurde)
+        InstagramRequest request = new InstagramRequest();    // hier wird das externe Modul AndroidInsta verwendet(dabei musste über Import Modul ein externes Modul importiert werden, dass anschließend als Dependency hinzugefügt wurde)
 
 
         try {
