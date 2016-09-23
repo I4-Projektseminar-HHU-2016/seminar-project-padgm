@@ -1,16 +1,13 @@
 package com.example.paul.hashtagworldmap;
 
-import android.os.AsyncTask;
+
 import android.os.Build;
 import android.os.StrictMode;
 import net.londatiga.android.instagram.InstagramRequest;
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
