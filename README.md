@@ -1,50 +1,47 @@
 #LAY! ![](logo.png)
 
-'Location Around You' ist eine Android Application, die es ermöglicht bei Instagram genutzte und eigentragene Locations in der direkten Umgebung, aber auch an konkret gesuchten Orten anzuzeigen.
+'Location Around You' is an android application which allows you to look for locations that are used by Instagram. Futhermore you can search for a special Location where you want to find more location of Instagram.
 
    
 ![](bild1.png "Auswahl und Eingabe")
         
-Man kann einen Ort eingeben, Anzahl der Orte wählen und auch den Radius einstellen.
-   
+You can enter a special location and edit die range of locations and distance.  
    
 ![](bild2.png "Köln")    
   
 
-Angezeigt wird Köln mit den umgebenden Orten, die bei Instagram populär und auch eingetragen sind.
-     
+Popular locations of Instagram were shown around Cologne.    
      
 ![](bild3.png "photokina")
        
-Aktuell (21.09.2016) läuft hier bspw. die größte Photographie-Messe der Welt, die Photokina.
-  
+An example is the "Photokina", the largest exhibition for photography.  
    
-##Installieren der App
+##Installation
 
-Die App liegt als apk-Datei vor: "aroundU.apk".
-Um die App nutzen zu können benötigt es entweder einen Android Emulator für den Computer oder ein Android Smartphone. Dabei sollte die Android Version 5.1 Lollipop oder höher mit Google Api 22+ verwendet werden, da sonst einige Eigenschaften der App nicht funktionieren werden.
+The app is an apk-file named: "aroundU.apk".
+For using the app you need an android emulator or an android smartphone. The android version should be 5.1 Lollipop or higher with the google api 22+.
 
-###Installieren auf dem Smartphone
+###Installation on a smartphone
 
-1. Unter den Einstellungen des Smartphones das Installieren von Unbekannten Quellen aktivieren.
+1. Activate Unkown sources at your phone settings.
 
-2. apk-Datei herunterladen, anschließend öffnen und installieren.
+2. download apk-file and open and install it.
 
-3. GPS und Internet aktivieren und die installierte App öffnen.
+3. GPS and Internet should be activated to run the app correctly
 
-###Installieren auf einem Emulator
+###Installation on an emulator
 
-Für Windows und Mac OS bietet sich bspw. der Emulator [Andy](http://www.andyroid.net) an, da dort APKs installiert werden können und ganz allgemein über eine Virtual Box läuft. Es sollte aber auch auf jedem beliebigen anderen Emulator funktionieren, die apks unterstüzt. Hier muss die Installation emulatorspezifisch geschehen. In den meisten Fällen sieht es so aus wie beim Smartphone selbst.
-Natürlich muss auch hier die korrekte Android Version genutzt werden (Android Version 5.1 Lollipop oder höher sein mit Google Api 22+).
+For windows and Mac OS you can use [Andy](http://www.andyroid.net), because you can install apk-files and it runs on a virtual box.
+In the most cases the installation is the same as on the smartphone. It should be used the correct android version as well.
 
-##Entwicklung
+##Development
 
-###Entwickelt mit:
+###Developed with:
 
-Hauptsächlich wurde als IDE [Android Studio](https://developer.android.com/studio/index.html) 2.1+ benutzt. Android Studio basiert auf Intellij von [JetBrains](https://www.jetbrains.com) und ist die von Google offizielle Entwicklungsumgebung für Android Apps.
-Um die Bilder, wie Marker etc. zu erstellen, habe ich [Autodesk SketchBook](https://itunes.apple.com/de/app/autodesk-sketchbook/id863486266?mt=12) verwendet.
+The IDE [Android Studio](https://developer.android.com/studio/index.html) 2.1+ was the main tool to develope the app. Android Studio is based on IntelliJ by
+ [JetBrains](https://www.jetbrains.com)  and is the official IDE of Google for android apps. For editing and creating the pictures i used [Autodesk SketchBook](https://itunes.apple.com/de/app/autodesk-sketchbook/id863486266?mt=12). 
 
-###Entwickelt von:
+###Developed from:
 
 Paul Degemann
 
